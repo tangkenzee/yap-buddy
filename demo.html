@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yap Buddy — study by talking</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Karla:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --oat:    #F3EEE1;   /* warm paper ground */
+    --linen:  #E6DFCC;   /* soft edges */
+    --cream:  #FCFAF3;   /* cards */
+    --bark:   #3B382C;   /* ink */
+    --clay:   #8B7F67;   /* secondary text */
+    --sage:   #8CA173;   /* light green */
+    --moss:   #55703F;   /* accent green */
+    --coffee: #7A5638;   /* warm brown */
+
+    --display: "Quicksand", system-ui, sans-serif;
+    --body:    "Karla", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--oat);
+    color: var(--bark);
+    font-family: var(--body);
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(46rem 30rem at 88% -6%, #E8E7D2 0%, transparent 60%),
+      radial-gradient(40rem 28rem at 4% 6%, #F6EFDF 0%, transparent 58%);
+    background-repeat: no-repeat;
+  }
+
+  .shell {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vh, 2.25rem) clamp(1.25rem, 5vw, 2.5rem) 9rem;
+  }
+
+  /* ---------- pixel sprites ---------- */
+
+  .sprite {
+    image-rendering: pixelated;
+    shape-rendering: crispEdges;
+    display: block;
+  }
+  .steam { animation: steam 3.4s ease-in-out infinite; }
+  .steam-2 { animation-delay: .5s; }
+  .steam-3 { animation-delay: 1s; }
+  @keyframes steam {
+    0%   { opacity: 0; transform: translateY(1px); }
+    30%  { opacity: .75; }
+    70%  { opacity: .25; }
+    100% { opacity: 0; transform: translateY(-3px); }
+  }
+  .leaves {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: sway 6s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-2.5deg); }
+    50%      { transform: rotate(2.5deg); }
+  }
+  .breathe {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: breathe 4.5s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scaleY(1); }
+    50%      { transform: scaleY(1.06); }
+  }
+  .tail {
+    transform-box: fill-box;
+    transform-origin: 0% 50%;
+    animation: flick 7s ease-in-out infinite;
+  }
+  @keyframes flick {
+    0%, 84%, 100% { transform: rotate(0deg); }
+    90%           { transform: rotate(-14deg); }
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: clamp(2rem, 7vh, 3.75rem);
+  }
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: .01em;
+  }
+  .wordmark .sprite { width: 2rem; height: 2rem; }
+  .tagline {
+    font-size: .92rem;
+    color: var(--clay);
+    font-style: italic;
+  }
+
+  /* ---------- hero ---------- */
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6.6vw, 4rem);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+    margin: 0 0 1.1rem;
+    max-width: 16ch;
+  }
+  h1 em { font-style: normal; color: var(--moss); }
+
+  .lede {
+    font-size: clamp(1.02rem, 1.5vw, 1.15rem);
+    line-height: 1.68;
+    color: var(--clay);
+    max-width: 48ch;
+    margin: 0 0 clamp(2.25rem, 6vh, 3.25rem);
+  }
+
+  /* ---------- signature: the café table ---------- */
+
+  .table {
+    position: relative;
+    background: var(--cream);
+    border: 1px solid var(--linen);
+    border-radius: 22px;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    box-shadow: 0 2px 0 var(--linen), 0 18px 40px -28px rgba(59,56,44,.5);
+    margin-bottom: clamp(2.25rem, 6vh, 3.25rem);
+  }
+
+  .table-top {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: .82rem;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin: 0 0 1.1rem;
+  }
+  .table-top .sprite { width: 1.5rem; height: 1.5rem; }
+
+  .rotator { position: relative; min-height: 3.4em; }
+  .rotator q {
+    quotes: none;
+    position: absolute;
+    inset: 0;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.2rem, 2.6vw, 1.7rem);
+    line-height: 1.36;
+    opacity: 0;
+    animation: cycle 15s infinite;
+  }
+  .rotator q:nth-of-type(2) { animation-delay: 5s; }
+  .rotator q:nth-of-type(3) { animation-delay: 10s; }
+  @keyframes cycle {
+    0%        { opacity: 0; transform: translateY(6px); }
+    4%, 30%   { opacity: 1; transform: none; }
+    34%, 100% { opacity: 0; transform: translateY(-6px); }
+  }
+
+  .your-turn {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin: 1.6rem 0 0;
+    padding-top: 1.2rem;
+    border-top: 1px dashed var(--linen);
+    font-size: .95rem;
+    color: var(--clay);
+  }
+  .bars { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
+  .bars i {
+    width: 3px;
+    border-radius: 1px;
+    background: var(--sage);
+    height: 30%;
+    animation: talk 1.6s ease-in-out infinite;
+  }
+  .bars i:nth-child(2) { animation-delay: .18s; }
+  .bars i:nth-child(3) { animation-delay: .36s; }
+  .bars i:nth-child(4) { animation-delay: .54s; }
+  .bars i:nth-child(5) { animation-delay: .72s; }
+  @keyframes talk {
+    0%, 100% { height: 28%; }
+    50%      { height: 100%; }
+  }
+
+  /* ---------- how it works ---------- */
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 3vw, 1.75rem);
+    margin-bottom: clamp(2.25rem, 6vh, 3.25rem);
+  }
+  .step .sprite { width: 2.5rem; height: 2.5rem; margin-bottom: .7rem; }
+  .step h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 .3rem;
+  }
+  .step p {
+    margin: 0;
+    font-size: .92rem;
+    line-height: 1.6;
+    color: var(--clay);
+  }
+
+  /* ---------- notes ---------- */
+
+  .notes-head {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin: 0 0 .85rem;
+  }
+  .note-row {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    background: var(--cream);
+    border: 1px solid var(--linen);
+    border-radius: 14px;
+    padding: .9rem 1.1rem;
+    font-size: .97rem;
+  }
+  .note-row + .note-row { margin-top: .45rem; }
+  .note-row .pill {
+    margin-left: auto;
+    font-size: .74rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--clay);
+    background: var(--oat);
+    border-radius: 999px;
+    padding: .28rem .7rem;
+  }
+  .note-row .bead {
+    width: .55rem;
+    height: .55rem;
+    border-radius: 50%;
+    background: var(--linen);
+  }
+  .note-row.is-on { border-color: var(--sage); }
+  .note-row.is-on .bead { background: var(--moss); }
+  .note-row.is-on .pill { color: var(--moss); background: #E9EEE0; }
+
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    margin: 1.6rem 0 0;
+    font-size: .95rem;
+    font-style: italic;
+    color: var(--clay);
+  }
+  .kicker .sprite { width: 2.3rem; height: 2.3rem; flex: none; }
+
+  /* ---------- load sequence ---------- */
+  .rise { animation: rise .8s cubic-bezier(.2,.7,.3,1) backwards; }
+  .d1 { animation-delay: .05s; }
+  .d2 { animation-delay: .14s; }
+  .d3 { animation-delay: .23s; }
+  .d4 { animation-delay: .32s; }
+  .d5 { animation-delay: .41s; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 640px) {
+    .tagline { display: none; }
+    .steps { grid-template-columns: 1fr; gap: 1.25rem; }
+    .note-row { flex-wrap: wrap; }
+    .note-row .pill { margin-left: 0; }
+  }
+
+  /* ---------- the clutter: ambient sprites all over the café ---------- */
+
+  .clutter {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .clutter .sprite {
+    position: absolute;
+    width: 2.1rem;
+    height: 2.1rem;
+    opacity: .85;
+  }
+  .clutter .sm { width: 1.5rem; height: 1.5rem; opacity: .7; }
+  .clutter .lg { width: 2.9rem; height: 2.9rem; }
+
+  .float  { animation: float 7s ease-in-out infinite; }
+  .spin   { animation: spin 22s linear infinite; }
+  .wiggle { animation: wiggle 5s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-9px) rotate(3deg); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-7deg); }
+    50%      { transform: rotate(7deg); }
+  }
+  /* stagger everything so nothing moves in lockstep */
+  .clutter .sprite:nth-child(3n)   { animation-delay: -1.4s; animation-duration: 8.5s; }
+  .clutter .sprite:nth-child(3n+1) { animation-delay: -3.1s; animation-duration: 6.5s; }
+  .clutter .sprite:nth-child(4n)   { animation-delay: -5.2s; animation-duration: 9.5s; }
+  .clutter .sprite:nth-child(5n)   { animation-delay: -2.3s; }
+
+  /* the shelf: a proper row of café junk */
+  .shelf {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(.5rem, 2.2vw, 1.1rem);
+    margin: clamp(2rem, 6vh, 3rem) 0 0;
+    padding-top: 1.4rem;
+    border-top: 2px dotted var(--linen);
+  }
+  .shelf .sprite { width: 2.3rem; height: 2.3rem; }
+
+  .shell { position: relative; z-index: 1; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 860px) {
+    /* thin the clutter out so small screens stay calm and readable */
+    .clutter .sprite:nth-child(2n) { display: none; }
+  }
+  @media (max-width: 560px) {
+    .clutter { display: none; }
+  }
+
+  /* ---------- quality floor ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .rotator { min-height: 0; }
+    .rotator q { position: static; opacity: 1; }
+    .rotator q + q { display: none; }
+  }
+  :focus-visible { outline: 3px solid var(--moss); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<!-- pixel sprites, drawn once and reused -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="s-cup">
+      <!-- steam -->
+      <rect class="steam"         x="5" y="1" width="1" height="3" fill="#B9AE93"/>
+      <rect class="steam steam-2" x="7" y="0" width="1" height="4" fill="#B9AE93"/>
+      <rect class="steam steam-3" x="9" y="1" width="1" height="3" fill="#B9AE93"/>
+      <!-- handle: outline then hollow -->
+      <rect x="11" y="7"  width="4" height="5" fill="#6B6250"/>
+      <rect x="12" y="8"  width="2" height="3" fill="#F3EEE1"/>
+      <!-- cup: outline then body -->
+      <rect x="1"  y="5"  width="11" height="9" fill="#6B6250"/>
+      <rect x="2"  y="6"  width="9"  height="7" fill="#FCFAF3"/>
+      <!-- coffee -->
+      <rect x="2"  y="6"  width="9"  height="2" fill="#7A5638"/>
+      <!-- saucer -->
+      <rect x="0"  y="14" width="14" height="2" fill="#6B6250"/>
+      <rect x="1"  y="14" width="12" height="1" fill="#C9BFA6"/>
+    </g>
+
+    <g id="s-plant">
+      <g class="leaves">
+        <rect x="7"  y="4" width="2" height="7" fill="#55703F"/>
+        <rect x="4"  y="5" width="3" height="2" fill="#8CA173"/>
+        <rect x="3"  y="7" width="2" height="2" fill="#8CA173"/>
+        <rect x="9"  y="3" width="3" height="2" fill="#8CA173"/>
+        <rect x="11" y="5" width="2" height="2" fill="#8CA173"/>
+        <rect x="9"  y="7" width="3" height="2" fill="#55703F"/>
+        <rect x="4"  y="9" width="3" height="2" fill="#55703F"/>
+      </g>
+      <rect x="3" y="10" width="10" height="2" fill="#8B7F67"/>
+      <rect x="4" y="12" width="8"  height="3" fill="#7A5638"/>
+    </g>
+
+    <g id="s-books">
+      <rect x="2" y="11" width="12" height="3" fill="#8CA173"/>
+      <rect x="2" y="11" width="12" height="1" fill="#A8B993"/>
+      <rect x="3" y="8"  width="10" height="3" fill="#7A5638"/>
+      <rect x="3" y="8"  width="10" height="1" fill="#9A7150"/>
+      <rect x="4" y="5"  width="9"  height="3" fill="#55703F"/>
+      <rect x="4" y="5"  width="9"  height="1" fill="#6E8A53"/>
+    </g>
+
+    <g id="s-cat">
+      <rect class="tail" x="12" y="12" width="4" height="1" fill="#C2A57F"/>
+      <g class="breathe">
+        <rect x="3" y="9" width="10" height="5" fill="#C2A57F"/>
+        <rect x="3" y="6" width="6"  height="4" fill="#C2A57F"/>
+        <rect x="3" y="5" width="1"  height="1" fill="#C2A57F"/>
+        <rect x="8" y="5" width="1"  height="1" fill="#C2A57F"/>
+        <rect x="4" y="8" width="2"  height="1" fill="#3B382C"/>
+        <rect x="7" y="8" width="1"  height="1" fill="#3B382C"/>
+      </g>
+    </g>
+
+    <!-- ============ the café clutter ============ -->
+
+    <g id="s-donut">
+      <rect x="4" y="3"  width="8"  height="10" fill="#C98A5E"/>
+      <rect x="3" y="5"  width="10" height="6"  fill="#C98A5E"/>
+      <rect x="4" y="3"  width="8"  height="3"  fill="#E0A0A0"/>
+      <rect x="3" y="5"  width="10" height="2"  fill="#E0A0A0"/>
+      <rect x="6" y="7"  width="4"  height="3"  fill="#F3EEE1"/>
+      <rect x="5" y="4"  width="1"  height="1"  fill="#FCFAF3"/>
+      <rect x="9" y="5"  width="1"  height="1"  fill="#FCFAF3"/>
+    </g>
+
+    <g id="s-croissant">
+      <rect x="3"  y="7" width="10" height="4" fill="#D8A45F"/>
+      <rect x="2"  y="8" width="2"  height="3" fill="#C08843"/>
+      <rect x="12" y="8" width="2"  height="3" fill="#C08843"/>
+      <rect x="5"  y="6" width="6"  height="1" fill="#E6BC7C"/>
+      <rect x="6"  y="8" width="1"  height="2" fill="#B8813E"/>
+      <rect x="9"  y="8" width="1"  height="2" fill="#B8813E"/>
+    </g>
+
+    <g id="s-cake">
+      <rect x="3" y="9"  width="10" height="5" fill="#E8C86E"/>
+      <rect x="3" y="7"  width="10" height="2" fill="#E0A0A0"/>
+      <rect x="3" y="11" width="10" height="1" fill="#C98A5E"/>
+      <rect x="7" y="4"  width="2"  height="3" fill="#8CA173"/>
+      <rect x="6" y="3"  width="4"  height="2" fill="#C4574F"/>
+    </g>
+
+    <g id="s-teapot">
+      <rect x="3"  y="7"  width="9" height="6" fill="#8CA173"/>
+      <rect x="4"  y="6"  width="7" height="1" fill="#A8B993"/>
+      <rect x="12" y="8"  width="3" height="1" fill="#8CA173"/>
+      <rect x="14" y="9"  width="1" height="2" fill="#8CA173"/>
+      <rect x="6"  y="4"  width="3" height="2" fill="#6E8A53"/>
+      <rect x="2"  y="13" width="11" height="1" fill="#55703F"/>
+    </g>
+
+    <g id="s-boba">
+      <rect x="4"  y="4"  width="8" height="10" fill="#EFE3CC"/>
+      <rect x="4"  y="4"  width="8" height="2"  fill="#D8C7A6"/>
+      <rect x="9"  y="1"  width="2" height="4"  fill="#C4574F"/>
+      <rect x="5"  y="11" width="2" height="2"  fill="#3B382C"/>
+      <rect x="8"  y="11" width="2" height="2"  fill="#3B382C"/>
+      <rect x="6"  y="9"  width="2" height="2"  fill="#3B382C"/>
+    </g>
+
+    <g id="s-cookie">
+      <rect x="4" y="4"  width="8"  height="9" fill="#D8A45F"/>
+      <rect x="3" y="6"  width="10" height="5" fill="#D8A45F"/>
+      <rect x="6" y="6"  width="2"  height="2" fill="#5A3A22"/>
+      <rect x="9" y="9"  width="2"  height="2" fill="#5A3A22"/>
+      <rect x="5" y="10" width="1"  height="1" fill="#5A3A22"/>
+    </g>
+
+    <g id="s-icecream">
+      <rect x="5" y="9"  width="6" height="2" fill="#D8A45F"/>
+      <rect x="6" y="11" width="4" height="2" fill="#C08843"/>
+      <rect x="7" y="13" width="2" height="2" fill="#B8813E"/>
+      <rect x="4" y="5"  width="8" height="4" fill="#E0A0A0"/>
+      <rect x="5" y="3"  width="6" height="3" fill="#EFE3CC"/>
+      <rect x="7" y="1"  width="2" height="2" fill="#C4574F"/>
+    </g>
+
+    <g id="s-sandwich">
+      <rect x="2" y="5"  width="12" height="3" fill="#D8A45F"/>
+      <rect x="2" y="8"  width="12" height="1" fill="#8CA173"/>
+      <rect x="2" y="9"  width="12" height="1" fill="#C4574F"/>
+      <rect x="2" y="10" width="12" height="3" fill="#D8A45F"/>
+    </g>
+
+    <g id="s-cactus">
+      <rect x="6"  y="3"  width="4" height="9" fill="#55703F"/>
+      <rect x="3"  y="6"  width="3" height="2" fill="#6E8A53"/>
+      <rect x="3"  y="6"  width="2" height="4" fill="#6E8A53"/>
+      <rect x="10" y="5"  width="3" height="2" fill="#6E8A53"/>
+      <rect x="11" y="5"  width="2" height="4" fill="#6E8A53"/>
+      <rect x="7"  y="1"  width="2" height="2" fill="#C4574F"/>
+      <rect x="4"  y="12" width="8" height="3" fill="#C08843"/>
+    </g>
+
+    <g id="s-mushroom">
+      <rect x="3" y="4"  width="10" height="4" fill="#C4574F"/>
+      <rect x="4" y="3"  width="8"  height="1" fill="#C4574F"/>
+      <rect x="5" y="4"  width="2"  height="2" fill="#F3EEE1"/>
+      <rect x="9" y="5"  width="2"  height="2" fill="#F3EEE1"/>
+      <rect x="6" y="8"  width="4"  height="6" fill="#EFE3CC"/>
+      <rect x="5" y="13" width="6"  height="1" fill="#D8C7A6"/>
+    </g>
+
+    <g id="s-sunflower">
+      <rect x="7" y="8"  width="2" height="7" fill="#55703F"/>
+      <rect x="4" y="10" width="3" height="2" fill="#6E8A53"/>
+      <rect x="6" y="4"  width="4" height="4" fill="#7A5638"/>
+      <rect x="6" y="2"  width="4" height="2" fill="#E8C86E"/>
+      <rect x="6" y="8"  width="4" height="2" fill="#E8C86E"/>
+      <rect x="3" y="4"  width="3" height="4" fill="#E8C86E"/>
+      <rect x="10" y="4" width="3" height="4" fill="#E8C86E"/>
+    </g>
+
+    <g id="s-bird">
+      <rect x="4"  y="6"  width="8" height="5" fill="#7BA0B8"/>
+      <rect x="10" y="4"  width="4" height="3" fill="#7BA0B8"/>
+      <rect x="14" y="5"  width="2" height="1" fill="#E8C86E"/>
+      <rect x="12" y="5"  width="1" height="1" fill="#3B382C"/>
+      <rect x="5"  y="7"  width="5" height="3" fill="#A5C2D4"/>
+      <rect x="1"  y="7"  width="4" height="2" fill="#5F86A0"/>
+      <rect x="6"  y="11" width="1" height="2" fill="#E8C86E"/>
+      <rect x="9"  y="11" width="1" height="2" fill="#E8C86E"/>
+    </g>
+
+    <g id="s-dog">
+      <rect x="3"  y="8"  width="9" height="4" fill="#C08843"/>
+      <rect x="10" y="5"  width="5" height="4" fill="#C08843"/>
+      <rect x="9"  y="4"  width="2" height="3" fill="#8B5E2B"/>
+      <rect x="14" y="7"  width="2" height="1" fill="#3B382C"/>
+      <rect x="12" y="6"  width="1" height="1" fill="#3B382C"/>
+      <rect x="4"  y="12" width="2" height="3" fill="#C08843"/>
+      <rect x="9"  y="12" width="2" height="3" fill="#C08843"/>
+      <rect x="1"  y="6"  width="2" height="3" fill="#C08843"/>
+    </g>
+
+    <g id="s-frog">
+      <rect x="3" y="7"  width="10" height="6" fill="#6E8A53"/>
+      <rect x="4" y="4"  width="3"  height="3" fill="#6E8A53"/>
+      <rect x="9" y="4"  width="3"  height="3" fill="#6E8A53"/>
+      <rect x="5" y="5"  width="1"  height="1" fill="#3B382C"/>
+      <rect x="10" y="5" width="1"  height="1" fill="#3B382C"/>
+      <rect x="5" y="10" width="6"  height="1" fill="#55703F"/>
+      <rect x="2" y="12" width="3"  height="2" fill="#55703F"/>
+      <rect x="11" y="12" width="3" height="2" fill="#55703F"/>
+    </g>
+
+    <g id="s-snail">
+      <rect x="2"  y="10" width="11" height="3" fill="#D8C7A6"/>
+      <rect x="4"  y="4"  width="8"  height="7" fill="#C08843"/>
+      <rect x="6"  y="6"  width="4"  height="3" fill="#EFE3CC"/>
+      <rect x="7"  y="7"  width="2"  height="1" fill="#C08843"/>
+      <rect x="12" y="8"  width="2"  height="2" fill="#D8C7A6"/>
+      <rect x="13" y="6"  width="1"  height="2" fill="#D8C7A6"/>
+      <rect x="15" y="5"  width="1"  height="2" fill="#D8C7A6"/>
+    </g>
+
+    <g id="s-butterfly">
+      <rect x="7" y="5"  width="2"  height="8" fill="#5A3A22"/>
+      <rect x="2" y="3"  width="5"  height="5" fill="#E0A0A0"/>
+      <rect x="9" y="3"  width="5"  height="5" fill="#E0A0A0"/>
+      <rect x="3" y="8"  width="4"  height="4" fill="#C4574F"/>
+      <rect x="9" y="8"  width="4"  height="4" fill="#C4574F"/>
+      <rect x="6" y="2"  width="1"  height="2" fill="#5A3A22"/>
+      <rect x="9" y="2"  width="1"  height="2" fill="#5A3A22"/>
+    </g>
+
+    <g id="s-fish">
+      <rect x="3"  y="6"  width="9" height="5" fill="#E09A5E"/>
+      <rect x="12" y="4"  width="3" height="9" fill="#D8834A"/>
+      <rect x="5"  y="7"  width="1" height="1" fill="#3B382C"/>
+      <rect x="6"  y="9"  width="5" height="1" fill="#F0C08A"/>
+      <rect x="7"  y="4"  width="3" height="2" fill="#D8834A"/>
+    </g>
+
+    <g id="s-laptop">
+      <rect x="3" y="4"  width="10" height="7" fill="#6B6250"/>
+      <rect x="4" y="5"  width="8"  height="5" fill="#A5C2D4"/>
+      <rect x="1" y="11" width="14" height="2" fill="#8B7F67"/>
+      <rect x="5" y="6"  width="4"  height="1" fill="#FCFAF3"/>
+      <rect x="5" y="8"  width="6"  height="1" fill="#FCFAF3"/>
+    </g>
+
+    <g id="s-headphones">
+      <rect x="4"  y="2"  width="8" height="2" fill="#3B382C"/>
+      <rect x="2"  y="4"  width="2" height="4" fill="#3B382C"/>
+      <rect x="12" y="4"  width="2" height="4" fill="#3B382C"/>
+      <rect x="1"  y="8"  width="4" height="5" fill="#C4574F"/>
+      <rect x="11" y="8"  width="4" height="5" fill="#C4574F"/>
+    </g>
+
+    <g id="s-pencil">
+      <rect x="3"  y="11" width="3"  height="3" fill="#E0A0A0"/>
+      <rect x="5"  y="9"  width="7"  height="4" fill="#E8C86E"/>
+      <rect x="10" y="6"  width="4"  height="4" fill="#D8A45F"/>
+      <rect x="12" y="4"  width="3"  height="3" fill="#3B382C"/>
+    </g>
+
+    <g id="s-notebook">
+      <rect x="3" y="2"  width="10" height="12" fill="#8CA173"/>
+      <rect x="5" y="2"  width="8"  height="12" fill="#FCFAF3"/>
+      <rect x="6" y="5"  width="6"  height="1"  fill="#D8C7A6"/>
+      <rect x="6" y="8"  width="6"  height="1"  fill="#D8C7A6"/>
+      <rect x="6" y="11" width="4"  height="1"  fill="#D8C7A6"/>
+    </g>
+
+    <g id="s-clock">
+      <rect x="4" y="2"  width="8"  height="12" fill="#7A5638"/>
+      <rect x="3" y="4"  width="10" height="8"  fill="#7A5638"/>
+      <rect x="5" y="4"  width="6"  height="8"  fill="#FCFAF3"/>
+      <rect x="4" y="5"  width="8"  height="6"  fill="#FCFAF3"/>
+      <rect x="7" y="6"  width="1"  height="3"  fill="#3B382C"/>
+      <rect x="8" y="8"  width="2"  height="1"  fill="#3B382C"/>
+    </g>
+
+    <g id="s-lamp">
+      <rect x="4" y="3"  width="8"  height="1" fill="#C4574F"/>
+      <rect x="3" y="4"  width="10" height="4" fill="#C4574F"/>
+      <rect x="4" y="8"  width="8"  height="1" fill="#E8C86E"/>
+      <rect x="7" y="9"  width="2"  height="4" fill="#6B6250"/>
+      <rect x="4" y="13" width="8"  height="2" fill="#6B6250"/>
+    </g>
+
+    <g id="s-candle">
+      <rect x="7" y="2"  width="2"  height="2" fill="#E8C86E"/>
+      <rect x="7" y="1"  width="1"  height="1" fill="#F0DFA0"/>
+      <rect x="7" y="4"  width="1"  height="1" fill="#8B7F67"/>
+      <rect x="5" y="5"  width="6"  height="8" fill="#EFE3CC"/>
+      <rect x="5" y="5"  width="2"  height="8" fill="#FCFAF3"/>
+      <rect x="4" y="13" width="8"  height="2" fill="#C08843"/>
+    </g>
+
+    <g id="s-moon">
+      <rect x="5"  y="2"  width="6" height="12" fill="#E8C86E"/>
+      <rect x="3"  y="4"  width="4" height="8"  fill="#E8C86E"/>
+      <rect x="8"  y="4"  width="5" height="8"  fill="#F3EEE1"/>
+      <rect x="10" y="2"  width="3" height="3"  fill="#F3EEE1"/>
+      <rect x="10" y="11" width="3" height="3"  fill="#F3EEE1"/>
+    </g>
+
+    <g id="s-star">
+      <rect x="7" y="2"  width="2"  height="12" fill="#E8C86E"/>
+      <rect x="2" y="7"  width="12" height="2"  fill="#E8C86E"/>
+      <rect x="5" y="5"  width="6"  height="6"  fill="#E8C86E"/>
+      <rect x="6" y="6"  width="2"  height="2"  fill="#F0DFA0"/>
+    </g>
+
+    <g id="s-vinyl">
+      <rect x="4" y="2"  width="8"  height="12" fill="#3B382C"/>
+      <rect x="2" y="4"  width="12" height="8"  fill="#3B382C"/>
+      <rect x="6" y="6"  width="4"  height="4"  fill="#C4574F"/>
+      <rect x="7" y="7"  width="2"  height="2"  fill="#F3EEE1"/>
+      <rect x="4" y="4"  width="1"  height="2"  fill="#6B6250"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- ambient café clutter, decorative only -->
+<div class="clutter" aria-hidden="true">
+  <svg class="sprite float"      style="top:3%;  left:3%"   viewBox="0 0 16 16"><use href="#s-donut"/></svg>
+  <svg class="sprite wiggle sm"  style="top:7%;  left:88%"  viewBox="0 0 16 16"><use href="#s-butterfly"/></svg>
+  <svg class="sprite float lg"   style="top:12%; left:90%"  viewBox="0 0 16 16"><use href="#s-plant"/></svg>
+  <svg class="sprite wiggle"     style="top:17%; left:1%"   viewBox="0 0 16 16"><use href="#s-croissant"/></svg>
+  <svg class="sprite float sm"   style="top:22%; left:87%"  viewBox="0 0 16 16"><use href="#s-star"/></svg>
+  <svg class="sprite spin"       style="top:26%; left:5%"   viewBox="0 0 16 16"><use href="#s-vinyl"/></svg>
+  <svg class="sprite float"      style="top:31%; left:87%"  viewBox="0 0 16 16"><use href="#s-boba"/></svg>
+  <svg class="sprite wiggle sm"  style="top:36%; left:2%"   viewBox="0 0 16 16"><use href="#s-mushroom"/></svg>
+  <svg class="sprite float"      style="top:41%; left:89%"  viewBox="0 0 16 16"><use href="#s-cookie"/></svg>
+  <svg class="sprite wiggle"     style="top:46%; left:6%"   viewBox="0 0 16 16"><use href="#s-frog"/></svg>
+  <svg class="sprite float sm"   style="top:52%; left:89%"  viewBox="0 0 16 16"><use href="#s-moon"/></svg>
+  <svg class="sprite wiggle"     style="top:57%; left:1%"   viewBox="0 0 16 16"><use href="#s-cactus"/></svg>
+  <svg class="sprite float"      style="top:62%; left:90%"  viewBox="0 0 16 16"><use href="#s-sunflower"/></svg>
+  <svg class="sprite wiggle sm"  style="top:67%; left:4%"   viewBox="0 0 16 16"><use href="#s-snail"/></svg>
+  <svg class="sprite float"      style="top:72%; left:90%"  viewBox="0 0 16 16"><use href="#s-teapot"/></svg>
+  <svg class="sprite wiggle"     style="top:78%; left:2%"   viewBox="0 0 16 16"><use href="#s-bird"/></svg>
+  <svg class="sprite float sm"   style="top:83%; left:88%"  viewBox="0 0 16 16"><use href="#s-candle"/></svg>
+  <svg class="sprite wiggle"     style="top:88%; left:6%"   viewBox="0 0 16 16"><use href="#s-fish"/></svg>
+  <svg class="sprite float"      style="top:93%; left:88%"  viewBox="0 0 16 16"><use href="#s-icecream"/></svg>
+  <svg class="sprite wiggle sm"  style="top:96%; left:3%"   viewBox="0 0 16 16"><use href="#s-pencil"/></svg>
+</div>
+
+<div class="shell">
+
+  <header class="masthead rise d1">
+    <span class="wordmark">
+      <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true"><use href="#s-cup"/></svg>
+      Yap Buddy
+    </span>
+    <span class="tagline">yap yap yap yap yap</span>
+  </header>
+
+  <h1 class="rise d2">Talk through your notes, <em>out loud.</em></h1>
+
+  <p class="lede rise d3">
+    Load a set of lecture notes and we talk about it.
+    You answer with your voice, it tells you what you missed. 
+  </p>
+
+  <div class="table rise d4">
+    <p class="table-top">
+      <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true"><use href="#s-cup"/></svg>
+      Yap Buddy asks
+    </p>
+    <div class="rotator">
+      <q>What&rsquo;s the difference between a blocking and a non-blocking send?</q>
+      <q>A process finishes but its parent never calls wait. What&rsquo;s it called now?</q>
+      <q>Why does a context switch cost you time on a busy system?</q>
+    </div>
+    <p class="your-turn">
+      <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      …and you answer out loud, in your own words.
+    </p>
+  </div>
+
+  <div class="steps rise d5">
+    <div class="step">
+      <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true"><use href="#s-books"/></svg>
+      <h3>1 · Load your notes</h3>
+      <p>Slides, a PDF, or a page of markdown. Whatever subject you&rsquo;re on.</p>
+    </div>
+    <div class="step">
+      <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true"><use href="#s-cup"/></svg>
+      <h3>2 · Start a session</h3>
+      <p>Press start in the corner, let it use your mic, and settle in.</p>
+    </div>
+    <div class="step">
+      <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true"><use href="#s-plant"/></svg>
+      <h3>3 · Just talk</h3>
+      <p>It asks, you answer, it fills in the gaps. Stop whenever you like.</p>
+    </div>
+  </div>
+
+  <section>
+    <h2 class="notes-head">On the table today</h2>
+
+    <div class="note-row is-on">
+      <span class="bead" aria-hidden="true"></span>
+      <span>Operating Systems — Ch. 3, Processes</span>
+      <span class="pill">Ready</span>
+    </div>
+
+    <div class="note-row">
+      <span class="bead" aria-hidden="true"></span>
+      <span>Add another subject</span>
+      <span class="pill">Empty</span>
+    </div>
+
+    <p class="kicker">
+      <svg class="sprite" viewBox="0 0 16 16" aria-hidden="true"><use href="#s-cat"/></svg>
+      No streaks, no scores, no guilt. Come back whenever you feel like it.
+    </p>
+
+    <div class="shelf" aria-hidden="true">
+      <svg class="sprite float"  viewBox="0 0 16 16"><use href="#s-notebook"/></svg>
+      <svg class="sprite wiggle" viewBox="0 0 16 16"><use href="#s-laptop"/></svg>
+      <svg class="sprite float"  viewBox="0 0 16 16"><use href="#s-headphones"/></svg>
+      <svg class="sprite wiggle" viewBox="0 0 16 16"><use href="#s-clock"/></svg>
+      <svg class="sprite float"  viewBox="0 0 16 16"><use href="#s-lamp"/></svg>
+      <svg class="sprite wiggle" viewBox="0 0 16 16"><use href="#s-cake"/></svg>
+      <svg class="sprite float"  viewBox="0 0 16 16"><use href="#s-sandwich"/></svg>
+      <svg class="sprite wiggle" viewBox="0 0 16 16"><use href="#s-dog"/></svg>
+      <svg class="sprite float"  viewBox="0 0 16 16"><use href="#s-cup"/></svg>
+      <svg class="sprite wiggle" viewBox="0 0 16 16"><use href="#s-books"/></svg>
+    </div>
+  </section>
+
+</div>
+
+<!-- Widget colours and copy live on the agent (platform_settings.widget). -->
+<elevenlabs-convai agent-id="agent_1701m04xfzy0fssvkw59nq01s471"></elevenlabs-convai>
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+</body>
+</html>

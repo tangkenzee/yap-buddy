@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+
+# Course material — not ours to redistribute
+ch3.md
+*.pptx
+
+# Local tooling
+.claude/
+.agents/
+skills-lock.json
